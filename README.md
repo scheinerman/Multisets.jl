@@ -1,2 +1,3 @@
-# Multiset.jl
-Finite multisets in Julia
+# Multisets
+
+Finite multisets in Julia.
