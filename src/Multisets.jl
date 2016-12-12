@@ -4,7 +4,7 @@ import Base.show, Base.length, Base.getindex, Base.collect
 import Base.push!, Base.setindex!
 
 
-export Multiset
+export Multiset, set_short_show, set_long_show
 
 """
 A `Multiset` is an unordered collection of things with repetition permitted.
@@ -67,9 +67,36 @@ function collect{T}(M::Multiset{T})
   end
   try
     sort!(result)
-  end 
+  end
   return result
 end
 
+function long_string{T}(M::Multiset{T})
+  elts = collect(M)
+  n = length(elts)
+  str = "{"
+  for k=1:n
+    str *= string(elts[k])
+    if k<n
+      str *= ","
+    end
+  end
+  str *= "}"
+  return str
+end
+
+short_string{T}(M::Multiset{T}) = "Multiset{$T} with $(length(M)) elements"
+
+short_show_flag = true
+set_short_show() = (global short_show_flag = true; nothing)
+set_long_show()  = (global short_show_flag = false; nothing)
+
+function show(io::IO, M::Multiset)
+  if short_show_flag
+    print(io, short_string(M))
+  else
+    print(io, long_string(M))
+ end
+end
 
 end #end of Module
