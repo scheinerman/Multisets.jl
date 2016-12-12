@@ -4,7 +4,7 @@ export Multiset
 
 """
 A `Multiset` is an unordered collection of things with repetition permitted.
-A new `Multiset` container is created with `Multiset{T}()` where `T` is
+A new `Multiset` container is created with `Multiset{T}()` where `T` is the
 type of the objects held in the multiset. If `T` is omitted, it defaults
 to `Any`.
 """
