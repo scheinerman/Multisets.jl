@@ -53,7 +53,23 @@ function length(M::Multiset)
     total += v
   end
   return total
-end 
+end
+
+function collect{T}(M::Multiset{T})
+  n = length(M)
+  result = Vector{T}(n)
+  i = 0
+  for (k,v) in M.data
+    for _=1:v
+      i += 1
+      result[i] = k
+    end
+  end
+  try
+    sort!(result)
+  end 
+  return result
+end
 
 
 end #end of Module
