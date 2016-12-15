@@ -11,6 +11,10 @@ A `Multiset` is an unordered collection of things with repetition permitted.
 A new `Multiset` container is created with `Multiset{T}()` where `T` is the
 type of the objects held in the multiset. If `T` is omitted, it defaults
 to `Any`.
+
+A `Multiset` can be created from a collection `list` (such as a `Vector` or
+`Set`) with `Multiset(list)`. If an element is repeated in `list` it has
+the appropriate multiplicity.
 """
 type Multiset{T}
   data::Dict{T,Int}
@@ -20,6 +24,32 @@ type Multiset{T}
   end
 end
 Multiset() = Multiset{Any}()
+
+function Multiset{T,d}(list::AbstractArray{T,d})
+  M = Multiset{T}()
+  for x in list
+    push!(M,x)
+  end
+  return M
+end
+
+function Mulitset{T}(A::Set{T})
+  M = Multiset{T}()
+  for x in A
+    push!(M,x)
+  end
+  return M
+end
+
+
+function Mulitset{T}(A::IntSet)
+  M = Multiset{Int}()
+  for x in A
+    push!(M,x)
+  end
+  return M
+end
+
 
 """
 For a `M[t]` where `M` is a `Multiset` returns the
@@ -41,7 +71,7 @@ function push!{T}(M::Multiset{T}, x::T, incr::Int=1)::Multiset{T}
   end
   if M.data[x] < 0
     M.data[x]=0
-  end 
+  end
   return M
 end
 
