@@ -33,12 +33,15 @@ function getindex{T}(M::Multiset{T}, x::T)::Int
   return 0
 end
 
-function push!{T}(M::Multiset{T}, x::T)::Multiset{T}
+function push!{T}(M::Multiset{T}, x::T, incr::Int=1)::Multiset{T}
   if haskey(M.data,x)
-    M.data[x] += 1
+    M.data[x] += incr
   else
-    M.data[x] = 1
+    M.data[x] = incr
   end
+  if M.data[x] < 0
+    M.data[x]=0
+  end 
   return M
 end
 
