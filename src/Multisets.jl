@@ -1,6 +1,7 @@
 module Multisets
 
 import Base.show, Base.length, Base.getindex, Base.collect
+import Base.union, Base.intersect
 import Base.push!, Base.setindex!
 
 
@@ -166,6 +167,32 @@ function show(io::IO, M::Multiset)
     print(io, julia_string(M))
   end
 end
+
+
+function union{S,T}(A::Multiset{S}, B::Multiset{T})
+  ST = typejoin(S,T)
+  M = Multiset{ST}()
+  for (x,v) in A.data
+    push!(M,x,v)
+  end
+  for (x,v) in B.data
+    push!(M,x,v)
+  end
+  return M
+end
+
+function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
+  ST = typejoin(S,T)
+  M = Multiset{ST}()
+  for (x,v) in A.data
+    m = min(A[x],B[x])
+    push!(M,x,m)
+  end
+  return M
+end
+
+
+
 
 
 end #end of Module

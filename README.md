@@ -78,3 +78,22 @@ be a proper Julia definition of that multiset:
 
 
 ## Operations
+
+The functions `union` and `intersect` compute the union and intersection
+of multisets. For example:
+```julia
+julia> A = Multiset(1,2,2,2,2,3,3)
+{1,2,2,2,2,3,3}
+
+julia> B = Multiset(2,2,3,4,4)
+{2,2,3,4,4}
+
+julia> union(A,B)
+{1,2,2,2,2,2,2,3,3,3,4,4}
+
+julia> intersect(A,B)
+{2,2,3}
+```
+
+The function `length` computes the number of elements in a multiset
+(including multiplicities).
