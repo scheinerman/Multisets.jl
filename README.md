@@ -35,7 +35,7 @@ allow `incr` to be negative to decrease the multiplicity of `x`
 To delete an element from `M` use `M[x]=0`.
 
 
-## Access and printing
+## Access
 
 To determine the multiplicity of `x` in `M` use `M[x]`. This returns `0`
 if `x` was never added to `M`.
@@ -53,8 +53,24 @@ julia> collect(M)
  4
 ```
 
-NEED DOCUMENTATION ON `multi_show_short`, `multi_show_braces`, and
-`multi_show_julia`.
+## Printing
+
+The result of `println(M)` can be controlled by the following functions.
+Suppose a multiset is created as follows:
+```julia
+julia> M = Multiset{String}();
+julia> push!(M,"alpha");
+julia> push!(M,"beta", 2);
+```
+
++ `set_braces_show()()` causes multisets to be printed
+as a list enclosed in curly braces:
+`{alpha,beta,beta}`. This is the default.
++ `set_short_show()` causes multisets to be printed in an
+abbreviated format like this: `Multiset{String} with 3 elements`.
++ `set_julia_show()` causes multisets to be printed in a form that would be a proper Julia definition
+of that multiset:
+`Multiset(String["alpha","beta","beta"])`.
 
 
 
