@@ -33,7 +33,7 @@ function Multiset{T,d}(list::AbstractArray{T,d})
   return M
 end
 
-function Mulitset{T}(A::Set{T})
+function Multiset{T}(A::Base.AbstractSet{T})
   M = Multiset{T}()
   for x in A
     push!(M,x)
@@ -42,13 +42,6 @@ function Mulitset{T}(A::Set{T})
 end
 
 
-function Mulitset{T}(A::IntSet)
-  M = Multiset{Int}()
-  for x in A
-    push!(M,x)
-  end
-  return M
-end
 
 
 """
@@ -120,7 +113,7 @@ end
 
 short_string{T}(M::Multiset{T}) = "Multiset{$T} with $(length(M)) elements"
 
-short_show_flag = true
+short_show_flag = false
 set_short_show() = (global short_show_flag = true; nothing)
 set_long_show()  = (global short_show_flag = false; nothing)
 
