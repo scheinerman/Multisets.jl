@@ -4,7 +4,7 @@ import Base.show, Base.length, Base.getindex, Base.collect
 import Base.push!, Base.setindex!
 
 
-export Multiset, set_short_show, set_long_show
+export Multiset, set_short_show, set_julia_show, set_braces_show
 
 """
 A `Multiset` is an unordered collection of things with repetition permitted.
@@ -41,7 +41,13 @@ function Multiset{T}(A::Base.AbstractSet{T})
   return M
 end
 
-
+function Multiset{T}(items::T...)
+  M = Multiset{T}()
+  for x in items
+    push!(M,x)
+  end
+  return M
+end
 
 
 """
@@ -97,7 +103,7 @@ function collect{T}(M::Multiset{T})
   return result
 end
 
-function long_string{T}(M::Multiset{T})
+function braces_string{T}(M::Multiset{T})
   elts = collect(M)
   n = length(elts)
   str = "{"
@@ -113,16 +119,49 @@ end
 
 short_string{T}(M::Multiset{T}) = "Multiset{$T} with $(length(M)) elements"
 
-short_show_flag = false
-set_short_show() = (global short_show_flag = true; nothing)
-set_long_show()  = (global short_show_flag = false; nothing)
+function julia_string{T}(M::Multiset{T})
+  elts = collect(M)
+  n = length(elts)
+  str = "Multiset($T["
+  for k=1:n
+    str *= string(elts[k])
+    if k<n
+      str *= ","
+    end
+  end
+  str *= "])"
+  return str
+end
+
+
+# This variable controls printing:
+# 0 -- {x,y,z}
+# 1 -- Multiset{T} with n elements
+# 2--  Multiset{T}(x,y,z)
+
+multi_show_braces = 0
+multi_show_short  = 1
+multi_show_julia  = 2
+multi_show_flag = multi_show_braces
+
+
+
+
+set_short_show() = (global multi_show_flag = multi_show_short; nothing)
+set_braces_show() = (global multi_show_flag = multi_show_braces; nothing)
+set_julia_show()  = (global multi_show_flag = multi_show_julia; nothing)
 
 function show(io::IO, M::Multiset)
-  if short_show_flag
+  if multi_show_flag == multi_show_short
     print(io, short_string(M))
-  else
-    print(io, long_string(M))
- end
+  end
+  if multi_show_flag == multi_show_braces
+    print(io, braces_string(M))
+  end
+  if multi_show_flag == multi_show_julia
+    print(io, julia_string(M))
+  end
 end
+
 
 end #end of Module
