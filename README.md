@@ -52,6 +52,9 @@ julia> collect(M)
  3
  4
 ```
+Notice that elements are repeated per their multiplicity.
+To get a list of the elements in which elements appear
+only once each use `unique(collect(M))`.
 
 ## Printing
 
@@ -68,8 +71,8 @@ as a list enclosed in curly braces:
 `{alpha,beta,beta}`. This is the default.
 + `set_short_show()` causes multisets to be printed in an
 abbreviated format like this: `Multiset{String} with 3 elements`.
-+ `set_julia_show()` causes multisets to be printed in a form that would be a proper Julia definition
-of that multiset:
++ `set_julia_show()` causes multisets to be printed in a form that would
+be a proper Julia definition of that multiset:
 `Multiset(String["alpha","beta","beta"])`.
 
 
