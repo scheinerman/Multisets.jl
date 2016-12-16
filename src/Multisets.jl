@@ -123,8 +123,12 @@ function julia_string{T}(M::Multiset{T})
   elts = collect(M)
   n = length(elts)
   str = "Multiset($T["
+  q = ""
+  if T <: AbstractString
+    q = "\""
+  end
   for k=1:n
-    str *= string(elts[k])
+    str *= q*string(elts[k])*q
     if k<n
       str *= ","
     end

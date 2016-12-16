@@ -40,21 +40,6 @@ To delete an element from `M` use `M[x]=0`.
 To determine the multiplicity of `x` in `M` use `M[x]`. This returns `0`
 if `x` was never added to `M`.
 
-When a `Multiset` is printed we either see a short description of the
-multiset or a full list of its elements. The functions `set_short_show` and
-`set_long_show` determine the print style (until one of these functions is
-called again).
-```julia
-julia> set_short_show()
-
-julia> M = Multiset([1,2,1,2,3,4])
-Multiset{Int64} with 6 elements
-
-julia> set_long_show()
-
-julia> M
-{1,1,2,2,3,4}
-```
 
 To get a list of all the elements in `M`, use `collect`:
 ```julia
@@ -67,6 +52,9 @@ julia> collect(M)
  3
  4
 ```
+
+NEED DOCUMENTATION ON `multi_show_short`, `multi_show_braces`, and
+`multi_show_julia`.
 
 
 
