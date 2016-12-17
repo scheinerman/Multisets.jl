@@ -150,7 +150,7 @@ for word in FILE
   push!(M,word)
 end
 ```
-In the end, `M[word]` will return how often `word` was seen in the file. 
+In the end, `M[word]` will return how often `word` was seen in the file.
 
 
 ## Miscellaneous
@@ -163,3 +163,17 @@ The function `clean!` purges the `data` field of any elements with multiplicity
 equal to `0`. This is only used by the `hash` function which is provided so
 a `Multiset` can be used as a key in a dictionary, etc. The hash of a
 `Multiset` is simply the hash of its cleaned `data` field.
+
+## Bugs 
+
+Operations on pairs of multisets of different types often result in errors.
+For example, suppose we do this:
+```julia
+julia> A = Multiset(1)
+{1}
+julia> B = Multiset(1.0)
+{1.0}
+```
+Then operations such as `union(A,B)` or comparisons such as `A==B` result
+in errors. I think we want the results of these to be `{1.0,1.0}` and
+`true`, respectively.
