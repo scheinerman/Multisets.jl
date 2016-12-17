@@ -3,8 +3,8 @@ module Multisets
 import Base.show, Base.length, Base.getindex, Base.collect
 import Base.union, Base.intersect, Base.isempty
 import Base.push!, Base.setindex!, Base.delete!, Base.hash
-import Base.issubset, Base.==, Base.Set, Base.(*), Base.(+), Base.(-)
-
+import Base.issubset, Base.Set, Base.(*), Base.(+), Base.(-)
+import Base.==, Base.<, Base.<=, Base.>, Base.>=
 
 export Multiset, set_short_show, set_julia_show, set_braces_show, clean!
 
@@ -85,7 +85,7 @@ end
 by `incr` (which defaults to 1). `incr` can be negative, but
 it is not possible to decrease the multiplicty below 0.
 """
-function push!{T}(M::Multiset{T}, x::T, incr::Int=1)::Multiset{T}
+function push!{T}(M::Multiset{T}, x, incr::Int=1)
   if haskey(M.data,x)
     M.data[x] += incr
   else
@@ -228,12 +228,15 @@ multiplicity of `x` is `max(A[x],B[x])`.
 function union{S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
-  for (x,v) in A.data
-    M.data[x] = max(v,B[x])
+
+  AA = Multiset(convert(Vector{ST},collect(A)))
+  BB = Multiset(convert(Vector{ST},collect(B)))
+
+  G = union(Set(A),Set(B)) # ground set
+  for x in G
+    push!(M, x, max(AA[x],BB[x]))
   end
-  for (x,v) in B.data
-    M.data[x] = max(A[x],v)
-  end
+
   return M
 end
 
@@ -245,24 +248,28 @@ function (+){S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
   for (x,v) in A.data
-    M.data[x] = v+B[x]
+    push!(M,x,v)
   end
   for (x,v) in B.data
-    M.data[x] = A[x]+v
+    push!(M,x,v)
   end
   return M
 end
 
 """
-`A-B` for multisets is the disjoint union, i.e., a new multiset in which the
-multiplicity of `x` is `A[x]-B[x]` unless this goes below `0`, in which case
-the multiplicity is 0.
+`A-B` for multisets is the multiset difference, i.e., a new multiset
+in which the multiplicity of `x` is `A[x]-B[x]` unless this goes
+below `0`, in which case the multiplicity is 0.
 """
 function (-){S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
-  for (x,v) in A.data
-    M.data[x] = max(v-B[x],0)
+
+  AA = Multiset(convert(Vector{ST},collect(A)))
+  BB = Multiset(convert(Vector{ST},collect(B)))
+
+  for (x,v) in AA.data
+    M.data[x] = max(v-BB[x],0)
   end
   return M
 end
@@ -278,11 +285,22 @@ multiplicity of `x` is `min(A[x],B[x])`.
 function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
-  for (x,v) in A.data
-    M.data[x] = min(v,B[x])
+  AA = Multiset{ST}()
+  for (a,v) in A.data
+    push!(AA,a,v)
   end
+
+  AA = Multiset(convert(Vector{ST},collect(A)))
+  BB = Multiset(convert(Vector{ST},collect(B)))
+
+  G = union(Set(AA),Set(BB)) # ground set
+  for x in G
+    push!(M, x, min(AA[x],BB[x]))
+  end
+
   return M
 end
+
 
 """
 `A*B` for the Cartesian product of multisets `A` and `B`.
@@ -313,14 +331,23 @@ end
 
 
 
-function issubset(A::Multiset, B::Multiset)
-  for (x,v) in A.data
-    if v > B[x]
+function issubset{S,T}(A::Multiset{S}, B::Multiset{T})
+  ST = typejoin(S,T)
+  AA = Multiset(convert(Vector{ST},collect(A)))
+  BB = Multiset(convert(Vector{ST},collect(B)))
+
+  for (x,v) in AA.data
+    if v > BB[x]
       return false
     end
   end
   return true
 end
+
+(<=)(A::Multiset, B::Multiset) = issubset(A,B)
+(<)(A::Multiset, B::Multiset) = (length(A)<length(B)) && (A<=B)
+(>)(A::Multiset, B::Multiset) = B<A
+(>=)(A::Multiset, B::Multiset) = B<=A
 
 (==)(A::Multiset, B::Multiset) = (length(A)==length(B)) && issubset(A,B)
 

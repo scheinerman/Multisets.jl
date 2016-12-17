@@ -138,6 +138,12 @@ if `A` and `B` are equal or `A`is a submultiset of `B`.
 Note that `A==B` holds when `A[x]==B[x]` for all `x` and `issubset(A,B)`
 holds when `A[x] <= B[x]` for all `x`.
 
+The following can be used for testing subset and superset:
++ `A <= B`
++ `A < B`
++ `A >= B`
++ `A > B`
+
 ## Multisets as counters
 
 Multisets are useful devices for counting. For example, suppose a program
@@ -163,17 +169,3 @@ The function `clean!` purges the `data` field of any elements with multiplicity
 equal to `0`. This is only used by the `hash` function which is provided so
 a `Multiset` can be used as a key in a dictionary, etc. The hash of a
 `Multiset` is simply the hash of its cleaned `data` field.
-
-## Bugs 
-
-Operations on pairs of multisets of different types often result in errors.
-For example, suppose we do this:
-```julia
-julia> A = Multiset(1)
-{1}
-julia> B = Multiset(1.0)
-{1.0}
-```
-Then operations such as `union(A,B)` or comparisons such as `A==B` result
-in errors. I think we want the results of these to be `{1.0,1.0}` and
-`true`, respectively.
