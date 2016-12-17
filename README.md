@@ -13,9 +13,11 @@ Pkg.clone("https://github.com/scheinerman/Multisets.jl.git")
 ## Creating a multiset
 
 ```julia
-M = Multiset{Type}()
+julia> using Multisets
+julia> M = Multiset{Type}()
 ```
-
+where `Type` is the type of elements to be held in `M`
+(e.g., `Int` or `String`).
 If `Type` is omitted, this defaults to `Any`.
 
 Given a collection `list` of elements (such as a `Vector` or `Set`)
