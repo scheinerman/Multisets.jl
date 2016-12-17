@@ -173,10 +173,10 @@ function union{S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
   for (x,v) in A.data
-    push!(M,x,v)
+    M[x] = max(v,B[x])
   end
   for (x,v) in B.data
-    push!(M,x,v)
+    M[x] = max(A[x],v)
   end
   return M
 end

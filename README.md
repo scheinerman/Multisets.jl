@@ -82,18 +82,21 @@ be a proper Julia definition of that multiset:
 The functions `union` and `intersect` compute the union and intersection
 of multisets. For example:
 ```julia
-julia> A = Multiset(1,2,2,2,2,3,3)
-{1,2,2,2,2,3,3}
+julia> A = Multiset(1,2,2,3)
+{1,2,2,3}
 
-julia> B = Multiset(2,2,3,4,4)
-{2,2,3,4,4}
+julia> B = Multiset(1,1,1,2,4)
+{1,1,1,2,4}
 
 julia> union(A,B)
-{1,2,2,2,2,2,2,3,3,3,4,4}
+{1,1,1,2,2,3,4}
 
 julia> intersect(A,B)
-{2,2,3}
+{1,2}
 ```
+The multiplicity of `x` in `union(A,B)` is `max(A[x],B[x])` and
+the multiplicity in `intersect(A,B)` is `min(A[x],B[x])`.
+
 
 The function `length` computes the number of elements in a multiset
 (including multiplicities).
