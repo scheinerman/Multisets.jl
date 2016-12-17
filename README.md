@@ -133,10 +133,25 @@ The function `isempty` returns `true` exactly when `length(M)==0`.
 ## Comparison
 
 The operator `A==B` and the function `issubset(A,B)` are provided to determine
-if two `A` and `B` are equal or `A`is a submultiset of `B`.
+if `A` and `B` are equal or `A`is a submultiset of `B`.
 
 Note that `A==B` holds when `A[x]==B[x]` for all `x` and `issubset(A,B)`
 holds when `A[x] <= B[x]` for all `x`.
+
+## Multisets as counters
+
+Multisets are useful devices for counting. For example, suppose a program
+reads in words from a text file and we want to count how often each word
+appears in that file. We can let `M = Multiset{String}()` and then
+step through the words in the file pushing each instance into `M`.
+The basic structure looks like this:
+```julia
+for word in FILE
+  push!(M,word)
+end
+```
+In the end, `M[word]` will return how often `word` was seen in the file. 
+
 
 ## Miscellaneous
 
