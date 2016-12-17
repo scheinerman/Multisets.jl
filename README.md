@@ -56,6 +56,13 @@ Notice that elements are repeated per their multiplicity.
 To get a list of the elements in which elements appear
 only once each use `unique(collect(M))`.
 
+To convert `M` into a Julia `Set` (effectively, set all multiplicities to 1)
+use `Set(M)`:
+```julia
+julia> Set(M)
+Set([4,2,3,1])
+```
+
 ## Printing
 
 The result of `println(M)` can be controlled by the following functions.
@@ -100,3 +107,16 @@ the multiplicity in `intersect(A,B)` is `min(A[x],B[x])`.
 
 The function `length` computes the number of elements in a multiset
 (including multiplicities).
+
+## Comparison
+
+The operator `A==B` and the function `issubset(A,B)` are provided to determine
+if two `A` and `B` are equal or `A`is a submultiset of `B`.
+
+Note that `A==B` holds when `A[x]==B[x]` for all `x` and `issubset(A,B)`
+holds when `A[x] <= B[x]` for all `x`.
+
+
+## To do
+
++ Document `clean!`

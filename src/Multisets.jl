@@ -2,10 +2,11 @@ module Multisets
 
 import Base.show, Base.length, Base.getindex, Base.collect
 import Base.union, Base.intersect
-import Base.push!, Base.setindex!
+import Base.push!, Base.setindex!, Base.delete!, Base.hash
+import Base.issubset, Base.==, Base.Set
 
 
-export Multiset, set_short_show, set_julia_show, set_braces_show
+export Multiset, set_short_show, set_julia_show, set_braces_show, clean!
 
 """
 A `Multiset` is an unordered collection of things with repetition permitted.
@@ -16,6 +17,9 @@ to `Any`.
 A `Multiset` can be created from a collection `list` (such as a `Vector` or
 `Set`) with `Multiset(list)`. If an element is repeated in `list` it has
 the appropriate multiplicity.
+
+A `Multiset` can also be created from a list of arguments:
+`Multiset(a,b,c,...)`.
 """
 type Multiset{T}
   data::Dict{T,Int}
@@ -50,6 +54,19 @@ function Multiset{T}(items::T...)
   return M
 end
 
+"""
+`clean!(M)` removes elements of multiplicy 0 from the underlying data
+structure supporting `M`.
+"""
+function clean!(M::Multiset)
+  for x in keys(M.data)
+    if M[x]==0
+      delete!(M.data,x)
+    end
+  end
+  nothing
+end
+
 
 """
 For a `M[t]` where `M` is a `Multiset` returns the
@@ -63,6 +80,11 @@ function getindex{T}(M::Multiset{T}, x::T)::Int
   return 0
 end
 
+"""
+`push!(M,x,incr)` increases the multiplicity of `x` in `M`
+by `incr` (which defaults to 1). `incr` can be negative, but
+it is not possible to decrease the multiplicty below 0.
+"""
 function push!{T}(M::Multiset{T}, x::T, incr::Int=1)::Multiset{T}
   if haskey(M.data,x)
     M.data[x] += incr
@@ -76,8 +98,14 @@ function push!{T}(M::Multiset{T}, x::T, incr::Int=1)::Multiset{T}
 end
 
 function setindex!{T}(M::Multiset{T}, m::Int, x::T)
-  @assert m>=0 "Multiplicity must be nonnegative"
-  M.data[x] = m
+  M.data[x] = max(m,0)
+end
+
+function delete!(M::Multiset, x)
+  if haskey(M.data,x)
+    delete!(M.data,x)
+  end
+  return M
 end
 
 function length(M::Multiset)
@@ -151,9 +179,32 @@ multi_show_flag = multi_show_braces
 
 
 
+"""
+Set show display mode for multisets, like this:
 
+`Multiset{Int64} with 7 elements`
+
+See also `set_braces_show` and `set_julia_show`.
+"""
 set_short_show() = (global multi_show_flag = multi_show_short; nothing)
+
+"""
+Set braces display mode for multisets, like this:
+
+`{1,2,2,3,3,3,3}`
+
+See also `set_short_show` and `set_julia_show`.
+"""
 set_braces_show() = (global multi_show_flag = multi_show_braces; nothing)
+
+
+"""
+Set Julia style display mode for multisets, like this:
+
+`Multiset(Int64[1,2,2,3,3,3,3])`
+
+See also `set_short_show` and `set_braces_show`.
+"""
 set_julia_show()  = (global multi_show_flag = multi_show_julia; nothing)
 
 function show(io::IO, M::Multiset)
@@ -168,7 +219,10 @@ function show(io::IO, M::Multiset)
   end
 end
 
-
+"""
+`union(A,B)` for multisets creates a new multiset in which the
+multiplicity of `x` is `max(A[x],B[x])`.
+"""
 function union{S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
@@ -181,6 +235,10 @@ function union{S,T}(A::Multiset{S}, B::Multiset{T})
   return M
 end
 
+"""
+`intersect(A,B)` for multisets creates a new multiset in which the
+multiplicity of `x` is `min(A[x],B[x])`.
+"""
 function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
@@ -191,8 +249,26 @@ function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
   return M
 end
 
+function issubset(A::Multiset, B::Multiset)
+  for (x,v) in A.data
+    if v > B[x]
+      return false
+    end
+  end
+  return true
+end
+
+(==)(A::Multiset, B::Multiset) = (length(A)==length(B)) && issubset(A,B)
+
+function hash(M::Multiset, h::UInt = UInt(0))
+  clean!(M)
+  return hash(M.data,h)
+end
 
 
-
+function Set{T}(M::Multiset{T})
+  iter = (x for x in keys(M.data) if M.data[x]>0)
+  return Set{T}(iter)
+end
 
 end #end of Module
