@@ -1,9 +1,9 @@
 module Multisets
 
 import Base.show, Base.length, Base.getindex, Base.collect
-import Base.union, Base.intersect
+import Base.union, Base.intersect, Base.isempty
 import Base.push!, Base.setindex!, Base.delete!, Base.hash
-import Base.issubset, Base.==, Base.Set
+import Base.issubset, Base.==, Base.Set, Base.(*), Base.(+), Base.(-)
 
 
 export Multiset, set_short_show, set_julia_show, set_braces_show, clean!
@@ -116,6 +116,8 @@ function length(M::Multiset)
   return total
 end
 
+isempty(M::Multiset) = length(M)==0
+
 function collect{T}(M::Multiset{T})
   n = length(M)
   result = Vector{T}(n)
@@ -172,9 +174,9 @@ end
 # 1 -- Multiset{T} with n elements
 # 2--  Multiset{T}(x,y,z)
 
-multi_show_braces = 0
-multi_show_short  = 1
-multi_show_julia  = 2
+const multi_show_braces = 0
+const multi_show_short  = 1
+const multi_show_julia  = 2
 multi_show_flag = multi_show_braces
 
 
@@ -227,13 +229,47 @@ function union{S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
   for (x,v) in A.data
-    M[x] = max(v,B[x])
+    M.data[x] = max(v,B[x])
   end
   for (x,v) in B.data
-    M[x] = max(A[x],v)
+    M.data[x] = max(A[x],v)
   end
   return M
 end
+
+"""
+`A+B` for multisets is the disjoint union, i.e., a new multiset in which the
+multiplicity of `x` is `A[x]+B[x]`.
+"""
+function (+){S,T}(A::Multiset{S}, B::Multiset{T})
+  ST = typejoin(S,T)
+  M = Multiset{ST}()
+  for (x,v) in A.data
+    M.data[x] = v+B[x]
+  end
+  for (x,v) in B.data
+    M.data[x] = A[x]+v
+  end
+  return M
+end
+
+"""
+`A-B` for multisets is the disjoint union, i.e., a new multiset in which the
+multiplicity of `x` is `A[x]-B[x]` unless this goes below `0`, in which case
+the multiplicity is 0.
+"""
+function (-){S,T}(A::Multiset{S}, B::Multiset{T})
+  ST = typejoin(S,T)
+  M = Multiset{ST}()
+  for (x,v) in A.data
+    M.data[x] = max(v-B[x],0)
+  end
+  return M
+end
+
+
+
+
 
 """
 `intersect(A,B)` for multisets creates a new multiset in which the
@@ -243,11 +279,39 @@ function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
   M = Multiset{ST}()
   for (x,v) in A.data
-    m = min(A[x],B[x])
-    push!(M,x,m)
+    M.data[x] = min(v,B[x])
   end
   return M
 end
+
+"""
+`A*B` for the Cartesian product of multisets `A` and `B`.
+"""
+function (*){S,T}(A::Multiset{S}, B::Multiset{T})
+  ST = Tuple{S,T}
+  M = Multiset{ST}()
+  for (a,v) in A.data
+    for (b,w) in B.data
+      M.data[(a,b)] = v*w
+    end
+  end
+  return M
+end
+
+"""
+`n*A` is the scalar multiple of a multiset in which the multiplicity of
+`x` is `n*A[x]`. Of course, we require `n >= 0`.
+"""
+function (*){T}(n::Int, A::Multiset{T})
+  @assert n>=0 "Scalar multiplication of a multiset must be by a nonnegative integer"
+  M = Multiset{T}()
+  for (x,v) in A.data
+    M.data[x] = n*v
+  end
+  return M
+end
+
+
 
 function issubset(A::Multiset, B::Multiset)
   for (x,v) in A.data

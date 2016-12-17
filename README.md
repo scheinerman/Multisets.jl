@@ -32,7 +32,7 @@ already in `M`, then it is added to `M`.
 allow `incr` to be negative to decrease the multiplicity of `x`
 (but not below 0).
 + `M[x]=m` explicitly sets the multiplicty of `x` to `m`.
-+ `delete!(M,x)` removes `x` from `M`. `M[x]=0` has the same effect. 
++ `delete!(M,x)` removes `x` from `M`. `M[x]=0` has the same effect.
 
 ## Access
 
@@ -85,6 +85,7 @@ be a proper Julia definition of that multiset:
 
 ## Operations
 
+#### Union/Intersection
 The functions `union` and `intersect` compute the union and intersection
 of multisets. For example:
 ```julia
@@ -103,9 +104,29 @@ julia> intersect(A,B)
 The multiplicity of `x` in `union(A,B)` is `max(A[x],B[x])` and
 the multiplicity in `intersect(A,B)` is `min(A[x],B[x])`.
 
+#### Product/sum/difference
 
-The function `length` computes the number of elements in a multiset
-(including multiplicities).
++ The *Cartesian product* of multisets `A` and `B` is computed with `A*B`.
+If `a` is an element of `A` and `b` is an element of `B` then the
+multiplicity of `(a,b)` in `A*B` is `A[x]*B[x]`.
+
++ For a nonnegative integer `n` and a multiset `A` the result of `n*A` is
+a new multiset in which the multiplicy of `x` is `n*A[x]`.
+
++ The *disjoint union* of `A` and `B` is computed with `A+B`.
+If `a` is an element of `A` and `b` is an element of `B` then the
+multiplicity of `(a,b)` in `A*B` is `A[x]+B[x]`.
+
++ The *difference* of multisets is computed as `A-B`. In the result,
+the multiplicity of `x` is `max(0, A[x]-B[x])`.
+
+
+#### Cardinality
+
+The function `length` computes the cardinality (number of elements)
+in a multiset (including multiplicities).
+
+The function `isempty` returns `true` exactly when `length(M)==0`.
 
 ## Comparison
 
@@ -115,7 +136,13 @@ if two `A` and `B` are equal or `A`is a submultiset of `B`.
 Note that `A==B` holds when `A[x]==B[x]` for all `x` and `issubset(A,B)`
 holds when `A[x] <= B[x]` for all `x`.
 
+## Miscellaneous
 
-## To do
+A `Multiset` consists of a single data field called `data` that is a
+dictionary mapping elements to their multiplicities. The various
+`Multiset` functions ensure the integrity of `data` (enforcing nonnegativity).
 
-+ Document `clean!`
+The function `clean!` purges the `data` field of any elements with multiplicity
+equal to `0`. This is only used by the `hash` function which is provided so
+a `Multiset` can be used as a key in a dictionary, etc. The hash of a
+`Multiset` is simply the hash of its cleaned `data` field.
