@@ -32,8 +32,7 @@ already in `M`, then it is added to `M`.
 allow `incr` to be negative to decrease the multiplicity of `x`
 (but not below 0).
 + `M[x]=m` explicitly sets the multiplicty of `x` to `m`.
-To delete an element from `M` use `M[x]=0`.
-
++ `delete!(M,x)` removes `x` from `M`. `M[x]=0` has the same effect. 
 
 ## Access
 
