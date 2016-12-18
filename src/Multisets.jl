@@ -221,24 +221,35 @@ function show(io::IO, M::Multiset)
   end
 end
 
+
+# private helper for union
+function _union{S}(A::Multiset{S}, B::Multiset{S})
+  M = Multiset{S}()
+  for (x,v) in A.data
+    M[x] = max(v,B[x])
+  end
+  for (y,w) in B.data
+    M[y] = max(A[y],w)
+  end
+  return M
+end
+
+
 """
 `union(A,B)` for multisets creates a new multiset in which the
 multiplicity of `x` is `max(A[x],B[x])`.
 """
 function union{S,T}(A::Multiset{S}, B::Multiset{T})
+  if S==T
+    return _union(A,B)
+  end
   ST = typejoin(S,T)
-  M = Multiset{ST}()
-
   AA = Multiset(convert(Vector{ST},collect(A)))
   BB = Multiset(convert(Vector{ST},collect(B)))
-
-  G = union(Set(A),Set(B)) # ground set
-  for x in G
-    push!(M, x, max(AA[x],BB[x]))
-  end
-
-  return M
+  return _union(AA,BB)
 end
+
+
 
 """
 `A+B` for multisets is the disjoint union, i.e., a new multiset in which the
@@ -256,49 +267,51 @@ function (+){S,T}(A::Multiset{S}, B::Multiset{T})
   return M
 end
 
+# private helper for A-B
+function _minus{S}(A::Multiset{S},B::Multiset{S})
+  M = Multiset{S}()
+  for (x,v) in A.data
+    M.data[x] = max(v-B[x],0)
+  end
+  return M
+end
+
 """
 `A-B` for multisets is the multiset difference, i.e., a new multiset
 in which the multiplicity of `x` is `A[x]-B[x]` unless this goes
 below `0`, in which case the multiplicity is 0.
 """
 function (-){S,T}(A::Multiset{S}, B::Multiset{T})
+  if S==T
+    return _minus(A,B)
+  end
   ST = typejoin(S,T)
-  M = Multiset{ST}()
-
   AA = Multiset(convert(Vector{ST},collect(A)))
   BB = Multiset(convert(Vector{ST},collect(B)))
+  return _minus(AA,BB)
+end
 
-  for (x,v) in AA.data
-    M.data[x] = max(v-BB[x],0)
+# private helper for intersect
+function _inter{S}(A::Multiset{S}, B::Multiset{S})
+  M = Multiset{S}()
+  for (x,v) in A.data
+    push!(M,x,min(v,B[x]))
   end
   return M
 end
-
-
-
-
 
 """
 `intersect(A,B)` for multisets creates a new multiset in which the
 multiplicity of `x` is `min(A[x],B[x])`.
 """
 function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
-  ST = typejoin(S,T)
-  M = Multiset{ST}()
-  AA = Multiset{ST}()
-  for (a,v) in A.data
-    push!(AA,a,v)
+  if S==T
+    return _inter(A,B)
   end
-
+  ST = typejoin(S,T)
   AA = Multiset(convert(Vector{ST},collect(A)))
   BB = Multiset(convert(Vector{ST},collect(B)))
-
-  G = union(Set(AA),Set(BB)) # ground set
-  for x in G
-    push!(M, x, min(AA[x],BB[x]))
-  end
-
-  return M
+  return _inter(AA,BB)
 end
 
 
@@ -329,19 +342,24 @@ function (*){T}(n::Int, A::Multiset{T})
   return M
 end
 
-
-
-function issubset{S,T}(A::Multiset{S}, B::Multiset{T})
-  ST = typejoin(S,T)
-  AA = Multiset(convert(Vector{ST},collect(A)))
-  BB = Multiset(convert(Vector{ST},collect(B)))
-
-  for (x,v) in AA.data
-    if v > BB[x]
+# private helper for issubset
+function _sub{S}(A::Multiset{S}, B::Multiset{S})
+  for (x,v) in A.data
+    if v > B[x]
       return false
     end
   end
   return true
+end
+
+function issubset{S,T}(A::Multiset{S}, B::Multiset{T})
+  if S==T
+    return _sub(A,B)
+  end
+  ST = typejoin(S,T)
+  AA = Multiset(convert(Vector{ST},collect(A)))
+  BB = Multiset(convert(Vector{ST},collect(B)))
+  return _sub(AA,BB)
 end
 
 (<=)(A::Multiset, B::Multiset) = issubset(A,B)
