@@ -17,9 +17,6 @@ to `Any`.
 A `Multiset` can be created from a collection `list` (such as a `Vector` or
 `Set`) with `Multiset(list)`. If an element is repeated in `list` it has
 the appropriate multiplicity.
-
-A `Multiset` can also be created from a list of arguments:
-`Multiset(a,b,c,...)`.
 """
 type Multiset{T}
   data::Dict{T,Int}
@@ -41,14 +38,6 @@ end
 function Multiset{T}(A::Base.AbstractSet{T})
   M = Multiset{T}()
   for x in A
-    push!(M,x)
-  end
-  return M
-end
-
-function Multiset{T}(items::T...)
-  M = Multiset{T}()
-  for x in items
     push!(M,x)
   end
   return M
