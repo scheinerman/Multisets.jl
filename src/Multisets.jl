@@ -73,7 +73,7 @@ For a `M[t]` where `M` is a `Multiset` returns the
 multiplicity of `t` in `M`. A value of `0` means that
 `t` is not a member of `M`.
 """
-function getindex{T}(M::Multiset{T}, x::T)::Int
+function getindex{T}(M::Multiset{T}, x)::Int
   if haskey(M.data,x)
     return M.data[x]
   end
@@ -97,7 +97,7 @@ function push!{T}(M::Multiset{T}, x, incr::Int=1)
   return M
 end
 
-function setindex!{T}(M::Multiset{T}, m::Int, x::T)
+function setindex!{T}(M::Multiset{T}, m::Int, x)
   M.data[x] = max(m,0)
 end
 
@@ -234,6 +234,15 @@ function _union{S}(A::Multiset{S}, B::Multiset{S})
   return M
 end
 
+function type_convert(T, A::Multiset)
+  M = Multiset{T}()
+  for (x,v) in A.data
+    xx = convert(T,x)
+    M[xx] = v
+  end
+  return M
+end
+
 
 """
 `union(A,B)` for multisets creates a new multiset in which the
@@ -244,8 +253,8 @@ function union{S,T}(A::Multiset{S}, B::Multiset{T})
     return _union(A,B)
   end
   ST = typejoin(S,T)
-  AA = Multiset(convert(Vector{ST},collect(A)))
-  BB = Multiset(convert(Vector{ST},collect(B)))
+  AA = type_convert(ST,A)
+  BB = type_convert(ST,B)
   return _union(AA,BB)
 end
 
@@ -286,8 +295,8 @@ function (-){S,T}(A::Multiset{S}, B::Multiset{T})
     return _minus(A,B)
   end
   ST = typejoin(S,T)
-  AA = Multiset(convert(Vector{ST},collect(A)))
-  BB = Multiset(convert(Vector{ST},collect(B)))
+  AA = type_convert(ST,A)
+  BB = type_convert(ST,B)
   return _minus(AA,BB)
 end
 
@@ -309,8 +318,8 @@ function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
     return _inter(A,B)
   end
   ST = typejoin(S,T)
-  AA = Multiset(convert(Vector{ST},collect(A)))
-  BB = Multiset(convert(Vector{ST},collect(B)))
+  AA = type_convert(ST,A)
+  BB = type_convert(ST,B)
   return _inter(AA,BB)
 end
 
@@ -357,8 +366,8 @@ function issubset{S,T}(A::Multiset{S}, B::Multiset{T})
     return _sub(A,B)
   end
   ST = typejoin(S,T)
-  AA = Multiset(convert(Vector{ST},collect(A)))
-  BB = Multiset(convert(Vector{ST},collect(B)))
+  AA = type_convert(ST,A)
+  BB = type_convert(ST,B)
   return _sub(AA,BB)
 end
 
