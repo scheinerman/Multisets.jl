@@ -169,3 +169,6 @@ The function `clean!` purges the `data` field of any elements with multiplicity
 equal to `0`. This is only used by the `hash` function which is provided so
 a `Multiset` can be used as a key in a dictionary, etc. The hash of a
 `Multiset` is simply the hash of its cleaned `data` field.
+**Note**: The `clean!` function is not exported. There probably should be no
+reason for the user to invoke it, but if desired used
+`Multisets.clean!(M)`.

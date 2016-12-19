@@ -6,7 +6,7 @@ import Base.push!, Base.setindex!, Base.delete!, Base.hash
 import Base.issubset, Base.Set, Base.(*), Base.(+), Base.(-)
 import Base.==, Base.<, Base.<=, Base.>, Base.>=
 
-export Multiset, set_short_show, set_julia_show, set_braces_show, clean!
+export Multiset, set_short_show, set_julia_show, set_braces_show
 
 """
 A `Multiset` is an unordered collection of things with repetition permitted.
