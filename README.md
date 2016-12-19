@@ -74,7 +74,7 @@ julia> push!(M,"alpha");
 julia> push!(M,"beta", 2);
 ```
 
-+ `set_braces_show()()` causes multisets to be printed
++ `set_braces_show()` causes multisets to be printed
 as a list enclosed in curly braces:
 `{alpha,beta,beta}`. This is the default.
 + `set_short_show()` causes multisets to be printed in an
