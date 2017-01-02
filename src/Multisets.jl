@@ -87,7 +87,9 @@ function push!{T}(M::Multiset{T}, x, incr::Int=1)
 end
 
 function setindex!{T}(M::Multiset{T}, m::Int, x)
-  M.data[x] = max(m,0)
+  mm = max(m,0)
+  M.data[x] = mm
+  return mm
 end
 
 function delete!(M::Multiset, x)
