@@ -1,10 +1,10 @@
 module Multisets
 
-import Base.show, Base.length, Base.getindex, Base.collect
-import Base.union, Base.intersect, Base.isempty
-import Base.push!, Base.setindex!, Base.delete!, Base.hash
-import Base.issubset, Base.Set, Base.(*), Base.(+), Base.(-)
-import Base.==, Base.<, Base.<=, Base.>, Base.>=
+import Base: show, length, getindex, collect, union, intersect, isempty
+import Base: push!, setindex!, delete!, hash
+import Base: (*), (+), (-), (|), (&)
+import Base: issubset, Set, (==), (<), (<=), (>), (>=)
+
 
 export Multiset, set_short_show, set_julia_show, set_braces_show
 
@@ -250,10 +250,14 @@ function union{S,T}(A::Multiset{S}, B::Multiset{T})
 end
 
 
+"""
+For multisets, `A|B` is `union(A,B)`. See also `+` which behaves differently.
+"""
+(|)(A::Multiset,B::Multiset) = union(A,B)
 
 """
 `A+B` for multisets is the disjoint union, i.e., a new multiset in which the
-multiplicity of `x` is `A[x]+B[x]`.
+multiplicity of `x` is `A[x]+B[x]`. This can be abbreviated `A|B`.
 """
 function (+){S,T}(A::Multiset{S}, B::Multiset{T})
   ST = typejoin(S,T)
@@ -303,6 +307,7 @@ end
 """
 `intersect(A,B)` for multisets creates a new multiset in which the
 multiplicity of `x` is `min(A[x],B[x])`.
+This may be abbreviated `A&B`.
 """
 function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
   if S==T
@@ -314,6 +319,10 @@ function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
   return _inter(AA,BB)
 end
 
+"""
+`A&B` for multisets is `intersect(A,B)`.
+"""
+(&)(A::Multiset,B::Multiset) = intersect(A,B)
 
 """
 `A*B` for the Cartesian product of multisets `A` and `B`.

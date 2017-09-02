@@ -106,6 +106,9 @@ julia> intersect(A,B)
 The multiplicity of `x` in `union(A,B)` is `max(A[x],B[x])` and
 the multiplicity in `intersect(A,B)` is `min(A[x],B[x])`.
 
+Union and intersection can be abbreviated `A|B` and `A&B`, respectively.
+See `+` below (disjoint union) which behaves differently. 
+
 #### Product/sum/difference
 
 + The *Cartesian product* of multisets `A` and `B` is computed with `A*B`.
