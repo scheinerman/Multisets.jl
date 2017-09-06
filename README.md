@@ -1,5 +1,12 @@
 # Multisets
 
+[![Build Status](https://travis-ci.org/scheinerman/Multisets.jl.svg?branch=master)](https://travis-ci.org/scheinerman/Multisets.jl)
+
+[![Coverage Status](https://coveralls.io/repos/scheinerman/Multisets.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/scheinerman/Multisets.jl?branch=master)
+
+[![codecov.io](http://codecov.io/github/scheinerman/Multisets.jl/coverage.svg?branch=master)](http://codecov.io/github/scheinerman/Multisets.jl?branch=master)
+
+
 Finite multisets in Julia.
 
 A *multiset* is an unordered collection of things with repetition permitted.
@@ -160,6 +167,7 @@ for word in FILE
 end
 ```
 In the end, `M[word]` will return how often `word` was seen in the file.
+See also my `Counters` module.
 
 
 ## Miscellaneous
