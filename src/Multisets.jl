@@ -18,9 +18,9 @@ A `Multiset` can be created from a collection `list` (such as a `Vector` or
 `Set`) with `Multiset(list)`. If an element is repeated in `list` it has
 the appropriate multiplicity.
 """
-type Multiset{T}
+struct Multiset{T}
   data::Dict{T,Int}
-  function Multiset()
+  function Multiset{T}() where T
     d = Dict{T,Int}()
     new(d)
   end
