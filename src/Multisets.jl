@@ -1,6 +1,6 @@
 module Multisets
 
-import Base: show, length, getindex, collect, union, intersect, isempty
+import Base: show, length, getindex, collect, union, intersect, isempty, first
 import Base: push!, setindex!, delete!, hash
 import Base: (*), (+), (-), (|), (&)
 import Base: issubset, Set, (==), (<), (<=), (>), (>=)
@@ -388,5 +388,14 @@ function Set{T}(M::Multiset{T})
   iter = (x for x in keys(M.data) if M.data[x]>0)
   return Set{T}(iter)
 end
+
+function first(M::Multiset{T})::T where T
+    if length(M)==0
+        error("Multiset must be nonempty")
+    end
+    return first(first(M.data))
+end
+
+
 
 end #end of Module
