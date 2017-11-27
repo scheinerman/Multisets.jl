@@ -393,6 +393,7 @@ function first(M::Multiset{T})::T where T
     if length(M)==0
         error("Multiset must be nonempty")
     end
+    clean!(M)
     return first(first(M.data))
 end
 
