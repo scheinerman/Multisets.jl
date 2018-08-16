@@ -1,5 +1,5 @@
 using Multisets
-using Base.Test
+using Test
 
 A = Multiset(1:5)
 B = A+A

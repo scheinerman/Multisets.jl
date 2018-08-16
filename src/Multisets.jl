@@ -27,7 +27,7 @@ struct Multiset{T}
 end
 Multiset() = Multiset{Any}()
 
-function Multiset{T,d}(list::AbstractArray{T,d})
+function Multiset(list::AbstractArray{T,d}) where {T,d}
   M = Multiset{T}()
   for x in list
     push!(M,x)
@@ -35,7 +35,7 @@ function Multiset{T,d}(list::AbstractArray{T,d})
   return M
 end
 
-function Multiset{T}(A::Base.AbstractSet{T})
+function Multiset(A::Base.AbstractSet{T}) where T
   M = Multiset{T}()
   for x in A
     push!(M,x)
@@ -62,7 +62,7 @@ For a `M[t]` where `M` is a `Multiset` returns the
 multiplicity of `t` in `M`. A value of `0` means that
 `t` is not a member of `M`.
 """
-function getindex{T}(M::Multiset{T}, x)::Int
+function getindex(M::Multiset{T}, x)::Int where T
   if haskey(M.data,x)
     return M.data[x]
   end
@@ -74,7 +74,7 @@ end
 by `incr` (which defaults to 1). `incr` can be negative, but
 it is not possible to decrease the multiplicty below 0.
 """
-function push!{T}(M::Multiset{T}, x, incr::Int=1)
+function push!(M::Multiset{T}, x, incr::Int=1) where T
   if haskey(M.data,x)
     M.data[x] += incr
   else
@@ -86,7 +86,7 @@ function push!{T}(M::Multiset{T}, x, incr::Int=1)
   return M
 end
 
-function setindex!{T}(M::Multiset{T}, m::Int, x)
+function setindex!(M::Multiset{T}, m::Int, x) where T
   mm = max(m,0)
   M.data[x] = mm
   return mm
@@ -109,9 +109,9 @@ end
 
 isempty(M::Multiset) = length(M)==0
 
-function collect{T}(M::Multiset{T})
+function collect(M::Multiset{T}) where T
   n = length(M)
-  result = Vector{T}(n)
+  result = Array{T,1}(undef,n)   #  Vector{T}(n)
   i = 0
   for (k,v) in M.data
     for _=1:v
@@ -121,11 +121,12 @@ function collect{T}(M::Multiset{T})
   end
   try
     sort!(result)
+  catch
   end
   return result
 end
 
-function braces_string{T}(M::Multiset{T})
+function braces_string(M::Multiset{T}) where T
   elts = collect(M)
   n = length(elts)
   str = "{"
@@ -139,9 +140,9 @@ function braces_string{T}(M::Multiset{T})
   return str
 end
 
-short_string{T}(M::Multiset{T}) = "Multiset{$T} with $(length(M)) elements"
+short_string(M::Multiset{T})  where T= "Multiset{$T} with $(length(M)) elements"
 
-function julia_string{T}(M::Multiset{T})
+function julia_string(M::Multiset{T}) where T
   elts = collect(M)
   n = length(elts)
   str = "Multiset($T["
@@ -214,7 +215,7 @@ end
 
 
 # private helper for union
-function _union{S}(A::Multiset{S}, B::Multiset{S})
+function _union(A::Multiset{S}, B::Multiset{S}) where S
   M = Multiset{S}()
   for (x,v) in A.data
     M[x] = max(v,B[x])
@@ -239,7 +240,7 @@ end
 `union(A,B)` for multisets creates a new multiset in which the
 multiplicity of `x` is `max(A[x],B[x])`.
 """
-function union{S,T}(A::Multiset{S}, B::Multiset{T})
+function union(A::Multiset{S}, B::Multiset{T}) where {S,T}
   if S==T
     return _union(A,B)
   end
@@ -259,7 +260,7 @@ For multisets, `A|B` is `union(A,B)`. See also `+` which behaves differently.
 `A+B` for multisets is the disjoint union, i.e., a new multiset in which the
 multiplicity of `x` is `A[x]+B[x]`. This can be abbreviated `A|B`.
 """
-function (+){S,T}(A::Multiset{S}, B::Multiset{T})
+function (+)(A::Multiset{S}, B::Multiset{T}) where {S,T}
   ST = typejoin(S,T)
   M = Multiset{ST}()
   for (x,v) in A.data
@@ -272,7 +273,7 @@ function (+){S,T}(A::Multiset{S}, B::Multiset{T})
 end
 
 # private helper for A-B
-function _minus{S}(A::Multiset{S},B::Multiset{S})
+function _minus(A::Multiset{S},B::Multiset{S}) where S
   M = Multiset{S}()
   for (x,v) in A.data
     M.data[x] = max(v-B[x],0)
@@ -285,7 +286,7 @@ end
 in which the multiplicity of `x` is `A[x]-B[x]` unless this goes
 below `0`, in which case the multiplicity is 0.
 """
-function (-){S,T}(A::Multiset{S}, B::Multiset{T})
+function (-)(A::Multiset{S}, B::Multiset{T}) where {S,T}
   if S==T
     return _minus(A,B)
   end
@@ -296,7 +297,7 @@ function (-){S,T}(A::Multiset{S}, B::Multiset{T})
 end
 
 # private helper for intersect
-function _inter{S}(A::Multiset{S}, B::Multiset{S})
+function _inter(A::Multiset{S}, B::Multiset{S}) where S
   M = Multiset{S}()
   for (x,v) in A.data
     push!(M,x,min(v,B[x]))
@@ -309,7 +310,7 @@ end
 multiplicity of `x` is `min(A[x],B[x])`.
 This may be abbreviated `A&B`.
 """
-function intersect{S,T}(A::Multiset{S}, B::Multiset{T})
+function intersect(A::Multiset{S}, B::Multiset{T}) where {S,T}
   if S==T
     return _inter(A,B)
   end
@@ -327,7 +328,7 @@ end
 """
 `A*B` for the Cartesian product of multisets `A` and `B`.
 """
-function (*){S,T}(A::Multiset{S}, B::Multiset{T})
+function (*)(A::Multiset{S}, B::Multiset{T}) where {S,T}
   ST = Tuple{S,T}
   M = Multiset{ST}()
   for (a,v) in A.data
@@ -342,7 +343,7 @@ end
 `n*A` is the scalar multiple of a multiset in which the multiplicity of
 `x` is `n*A[x]`. Of course, we require `n >= 0`.
 """
-function (*){T}(n::Int, A::Multiset{T})
+function (*)(n::Int, A::Multiset{T}) where T
   @assert n>=0 "Scalar multiplication of a multiset must be by a nonnegative integer"
   M = Multiset{T}()
   for (x,v) in A.data
@@ -352,7 +353,7 @@ function (*){T}(n::Int, A::Multiset{T})
 end
 
 # private helper for issubset
-function _sub{S}(A::Multiset{S}, B::Multiset{S})
+function _sub(A::Multiset{S}, B::Multiset{S}) where S
   for (x,v) in A.data
     if v > B[x]
       return false
@@ -361,7 +362,7 @@ function _sub{S}(A::Multiset{S}, B::Multiset{S})
   return true
 end
 
-function issubset{S,T}(A::Multiset{S}, B::Multiset{T})
+function issubset(A::Multiset{S}, B::Multiset{T}) where {S,T}
   if S==T
     return _sub(A,B)
   end
@@ -384,7 +385,7 @@ function hash(M::Multiset, h::UInt = UInt(0))
 end
 
 
-function Set{T}(M::Multiset{T})
+function Set(M::Multiset{T}) where T
   iter = (x for x in keys(M.data) if M.data[x]>0)
   return Set{T}(iter)
 end
