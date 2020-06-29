@@ -11,11 +11,6 @@ Finite multisets in Julia.
 
 A *multiset* is an unordered collection of things with repetition permitted.
 
-## Installation
-
-```julia
-Pkg.clone("https://github.com/scheinerman/Multisets.jl.git")
-```
 
 ## Creating a multiset
 
@@ -30,7 +25,7 @@ If `Type` is omitted, this defaults to `Any`.
 Given a collection `list` of elements (such as a `Vector` or `Set`)
 invoking `Multiset(list)` creates a new `Multiset` in which the elements
 of `list` appear with the appropriate multiplicity. For example,
-`Multiset(eye(Int,3))` creates the multiset `{0,0,0,0,0,0,1,1,1}`.
+`Multiset(ones(Int,3))` creates the multiset `{1,1,1}`.
 
 
 ## Adding/deleting elements
@@ -114,7 +109,7 @@ The multiplicity of `x` in `union(A,B)` is `max(A[x],B[x])` and
 the multiplicity in `intersect(A,B)` is `min(A[x],B[x])`.
 
 Union and intersection can be abbreviated `A|B` and `A&B`, respectively.
-See `+` below (disjoint union) which behaves differently. 
+See `+` below (disjoint union) which behaves differently.
 
 #### Product/sum/difference
 
