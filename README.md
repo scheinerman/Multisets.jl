@@ -89,7 +89,7 @@ julia> push!(M,"beta", 2);
 
 + `set_braces_show()` causes multisets to be printed
 as a list enclosed in curly braces:
-`{alpha,beta,beta}`. This is the default.
+`{alpha,beta,beta}`. This is the default. If the multiset is empty, `∅` is printed.
 + `set_short_show()` causes multisets to be printed in an
 abbreviated format like this: `Multiset{String} with 3 elements`.
 + `set_julia_show()` causes multisets to be printed in a form that would

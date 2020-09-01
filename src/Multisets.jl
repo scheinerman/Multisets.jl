@@ -132,6 +132,9 @@ end
 function braces_string(M::Multiset{T}) where {T}
     elts = collect(M)
     n = length(elts)
+    if n==0
+        return "∅"
+    end 
     str = "{"
     for k = 1:n
         str *= string(elts[k])
