@@ -1,7 +1,7 @@
 module Multisets
 
 import Base: show, length, getindex, collect, union, intersect, isempty, first
-import Base: push!, setindex!, delete!, hash
+import Base: push!, setindex!, delete!, hash, eltype
 import Base: (*), (+), (-), (|), (&)
 import Base: issubset, Set, (==), (<), (<=), (>), (>=)
 
@@ -26,6 +26,9 @@ struct Multiset{T}
     end
 end
 Multiset() = Multiset{Any}()
+Multiset(x...) = Multiset(collect(x))
+
+eltype(M::Multiset{T}) where T = T
 
 function Multiset(list::AbstractArray{T,d}) where {T,d}
     M = Multiset{T}()

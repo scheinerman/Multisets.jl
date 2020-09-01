@@ -27,6 +27,17 @@ invoking `Multiset(list)` creates a new `Multiset` in which the elements
 of `list` appear with the appropriate multiplicity. For example,
 `Multiset(ones(Int,3))` creates the multiset `{1,1,1}`.
 
+```julia
+julia> M = Multiset([1,1,2,3,5])
+{1,1,2,3,5}
+
+julia> M = Multiset(5,3,2,1,1)
+{1,1,2,3,5}
+
+julia> eltype(M)
+Int64
+```
+
 
 ## Adding/deleting elements
 
