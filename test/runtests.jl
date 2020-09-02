@@ -20,3 +20,7 @@ B[1]=0
 @test Multiset(1,2,3,1) == Multiset([1,1,2,3])
 @test eltype(Multiset(1,2,3)) == Int
 @test Multiset(1.0,2.0) == Multiset(1+0im, big(2))
+
+
+A = Multiset(1,1,1,2,1,3,3)
+@test sum(A) == 12

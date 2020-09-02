@@ -160,6 +160,28 @@ The following can be used for testing subset and superset:
 + `A >= B`
 + `A > B`
 
+## Iteration
+
+When iterating over a `Multiset` each element is repeated according to its 
+multiplicity. 
+```julia
+julia> A = Multiset(1,2,1,2,3)
+{1,1,2,2,3}
+
+julia> for a in A
+       println(a)
+       end
+2
+2
+3
+1
+1
+
+julia> sum(A)
+9
+```
+
+
 ## Multisets as counters
 
 Multisets are useful devices for counting. For example, suppose a program

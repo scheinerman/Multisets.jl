@@ -404,6 +404,7 @@ function first(M::Multiset{T})::T where {T}
     return first(first(M.data))
 end
 
+include("iter.jl")
 
 
 end #end of Module
