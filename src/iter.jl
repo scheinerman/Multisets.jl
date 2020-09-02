@@ -19,7 +19,7 @@ function iterate(M::Multiset, ss)
     end 
 
     result = iterate(M.data, s)
-    if result == nothing
+    if isnothing(result)
         return nothing
     end
     pr, st = result
