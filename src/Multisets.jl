@@ -28,7 +28,7 @@ end
 Multiset() = Multiset{Any}()
 Multiset(x...) = Multiset(collect(x))
 
-eltype(M::Multiset{T}) where T = T
+eltype(M::Multiset{T}) where {T} = T
 
 function Multiset(list::AbstractArray{T,d}) where {T,d}
     M = Multiset{T}()
@@ -132,9 +132,9 @@ end
 function braces_string(M::Multiset{T}) where {T}
     elts = collect(M)
     n = length(elts)
-    if n==0
+    if n == 0
         return "∅"
-    end 
+    end
     str = "{"
     for k = 1:n
         str *= string(elts[k])
@@ -406,5 +406,33 @@ end
 
 include("iter.jl")
 
+
+import Base: keys, values, pairs
+
+"""
+`keys(M::Multiset)` returns an iterator for the elements of `M`.
+"""
+function keys(M::Multiset{T}) where {T}
+    clean!(M)
+    return keys(M.data)
+end
+
+"""
+`values(M::Multiset)` returns an iterator for the 
+multiplicities of the elements of `M`.
+"""
+function values(M::Multiset{T}) where {T}
+    clean!(M)
+    return values(M.data)
+end
+
+"""
+`pairs(M::Multiset)` returns a dictionary mapping the elements of `M`
+to their multiplicities.
+"""
+function pairs(M::Multiset{T}) where {T}
+    clean!(M)
+    return pairs(M.data)
+end
 
 end #end of Module

@@ -24,3 +24,9 @@ B[1]=0
 
 A = Multiset(1,1,1,2,1,3,3)
 @test sum(A) == 12
+
+@test sort(collect(keys(A))) == [1,2,3]
+@test sort(collect(values(A))) == [1,2,4]
+
+d = pairs(A)
+@test d[1] == A[1]

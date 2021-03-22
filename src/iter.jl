@@ -15,8 +15,8 @@ import Base.iterate
 function iterate(M::Multiset, ss)
     val, k, s = ss
     if k < M[val]
-        return (val, (val,k+1,s))
-    end 
+        return (val, (val, k + 1, s))
+    end
 
     result = iterate(M.data, s)
     if isnothing(result)
@@ -36,5 +36,5 @@ function iterate(M::Multiset)
     end
     pr, st = result   # this is what iterate(M.data) gave us
     val = pr[1]
-    return (val, (val,1,st))
+    return (val, (val, 1, st))
 end

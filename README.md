@@ -46,11 +46,40 @@ allow `incr` to be negative to decrease the multiplicity of `x`
 + `M[x]=m` explicitly sets the multiplicty of `x` to `m`.
 + `delete!(M,x)` removes `x` from `M`. `M[x]=0` has the same effect.
 
+## Keys/Values/Pairs
+
+* `keys(M)` returns an iterator for the elements of `M` (that have multiplicyt at least one).
+* `values(M)` returns an iterator for the multiplicities of the elements.
+* `pairs(M)` returns a `Dict` mapping the elements of `M` to their respective multiplicites.
+
+```julia
+ulia> M = Multiset("alpha", "beta", "beta", "gamma", "gamma", "gamma")
+{alpha,beta,beta,gamma,gamma,gamma}
+
+julia> collect(keys(M))
+3-element Array{String,1}:
+ "alpha"
+ "gamma"
+ "beta"
+
+julia> collect(values(M))
+3-element Array{Int64,1}:
+ 1
+ 3
+ 2
+
+julia> pairs(M)
+Dict{String,Int64} with 3 entries:
+  "alpha" => 1
+  "gamma" => 3
+  "beta"  => 2
+```
+
+
 ## Access
 
 To determine the multiplicity of `x` in `M` use `M[x]`. This returns `0`
 if `x` was never added to `M`.
-
 
 To get a list of all the elements in `M`, use `collect`:
 ```julia
@@ -65,7 +94,7 @@ julia> collect(M)
 ```
 Notice that elements are repeated per their multiplicity.
 To get a list of the elements in which elements appear
-only once each use `unique(collect(M))`.
+only once each use `unique(collect(M))` or `collect(keys(M))`.
 
 To convert `M` into a Julia `Set` (effectively, set all multiplicities to 1)
 use `Set(M)`:
@@ -202,9 +231,9 @@ dictionary mapping elements to their multiplicities. The various
 `Multiset` functions ensure the integrity of `data` (enforcing nonnegativity).
 
 The function `clean!` purges the `data` field of any elements with multiplicity
-equal to `0`. This is only used by the `hash` function which is provided so
-a `Multiset` can be used as a key in a dictionary, etc. The hash of a
+equal to `0`. This is used by the `hash` function which is provided so a `Multiset` can be used as a key in a dictionary, etc. The hash of a
 `Multiset` is simply the hash of its cleaned `data` field.
+
 **Note**: The `clean!` function is not exported. There probably should be no
-reason for the user to invoke it, but if desired used
+reason for the user to invoke it, but if desired use
 `Multisets.clean!(M)`.
