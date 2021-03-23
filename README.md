@@ -49,11 +49,11 @@ allow `incr` to be negative to decrease the multiplicity of `x`
 ## Keys/Values/Pairs
 
 * `keys(M)` returns an iterator for the elements of `M` (that have multiplicyt at least one).
-* `values(M)` returns an iterator for the multiplicities of the elements.
-* `pairs(M)` returns a `Dict` mapping the elements of `M` to their respective multiplicites.
+* `values(M)` returns an iterator for the multiplicities of the elements of `M`.
+* `pairs(M)` returns an iterator over `element => multiplicity` pairs for `M`.
 
 ```julia
-ulia> M = Multiset("alpha", "beta", "beta", "gamma", "gamma", "gamma")
+julia> M = Multiset("alpha", "beta", "beta", "gamma", "gamma", "gamma")
 {alpha,beta,beta,gamma,gamma,gamma}
 
 julia> collect(keys(M))
@@ -94,7 +94,7 @@ julia> collect(M)
 ```
 Notice that elements are repeated per their multiplicity.
 To get a list of the elements in which elements appear
-only once each use `unique(collect(M))` or `collect(keys(M))`.
+only once each use `collect(keys(M))`.
 
 To convert `M` into a Julia `Set` (effectively, set all multiplicities to 1)
 use `Set(M)`:
@@ -231,7 +231,8 @@ dictionary mapping elements to their multiplicities. The various
 `Multiset` functions ensure the integrity of `data` (enforcing nonnegativity).
 
 The function `clean!` purges the `data` field of any elements with multiplicity
-equal to `0`. This is used by the `hash` function which is provided so a `Multiset` can be used as a key in a dictionary, etc. The hash of a
+equal to `0`. This is used by the `hash` function which is provided so a `Multiset` 
+can be used as a key in a dictionary, etc. The hash of a
 `Multiset` is simply the hash of its cleaned `data` field.
 
 **Note**: The `clean!` function is not exported. There probably should be no

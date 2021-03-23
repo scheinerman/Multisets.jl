@@ -409,27 +409,17 @@ include("iter.jl")
 
 import Base: keys, values, pairs
 
-"""
-`keys(M::Multiset)` returns an iterator for the elements of `M`.
-"""
+
 function keys(M::Multiset{T}) where {T}
     clean!(M)
     return keys(M.data)
 end
 
-"""
-`values(M::Multiset)` returns an iterator for the 
-multiplicities of the elements of `M`.
-"""
 function values(M::Multiset{T}) where {T}
     clean!(M)
     return values(M.data)
 end
 
-"""
-`pairs(M::Multiset)` returns a dictionary mapping the elements of `M`
-to their multiplicities.
-"""
 function pairs(M::Multiset{T}) where {T}
     clean!(M)
     return pairs(M.data)
