@@ -8,8 +8,15 @@ Finite multisets in Julia.
 
 A *multiset* is an unordered collection of things with repetition permitted.
 
+## New in Version 4.0
 
-## Creating a multiset
++ A `Multiset` is now a subtype of `AbstractSet`.
++ Set operations between a `Multiset` and a `Set` (or `BitSet`) are now permitted.
++ The operators `&` and `|` are removed; use `∩` and `∪` instead.
++ The operators `<`, `<=`, `>`, and `>=` are removed. Use `⊆` and `⊇` instead, or use the function `issubset`. 
+
+
+## Creating a Multiset
 
 ```julia
 julia> using Multisets
@@ -36,7 +43,7 @@ Int64
 ```
 
 
-## Adding/deleting elements
+## Adding/Deleting Elements
 
 + `push!(M,x)` increases the multiplicity of `x` in `M` by 1. If `x` is not
 already in `M`, then it is added to `M`.
@@ -145,10 +152,10 @@ julia> intersect(A,B)
 The multiplicity of `x` in `union(A,B)` is `max(A[x],B[x])` and
 the multiplicity in `intersect(A,B)` is `min(A[x],B[x])`.
 
-Union and intersection can be abbreviated `A|B` and `A&B`, respectively.
+
 See `+` below (disjoint union) which behaves differently.
 
-#### Product/sum/difference
+#### Product/Sum/Difference
 
 + The *Cartesian product* of multisets `A` and `B` is computed with `A*B`.
 If `a` is an element of `A` and `b` is an element of `B` then the
@@ -162,7 +169,23 @@ If `a` is an element of `A` and `b` is an element of `B` then the
 multiplicity of `(a,b)` in `A*B` is `A[x]+B[x]`.
 
 + The *difference* of multisets is computed as `A-B`. In the result,
-the multiplicity of `x` is `max(0, A[x]-B[x])`.
+the multiplicity of `x` is `max(0, A[x]-B[x])`. This is not the same as `setdiff` because
+`setdiff(A,B)` gives a multiset in which any element of `B` is completely removed from `A`.
+
+```julia
+julia> A = Multiset(1,1,2,3)
+{1,1,2,3}
+julia> B = Multiset(1,2)
+{1,2}
+julia> A-B
+{1,3}
+julia> setdiff(A,B)
+{3}
+```
+
+
+
+
 
 
 #### Cardinality
@@ -180,11 +203,7 @@ if `A` and `B` are equal or `A`is a submultiset of `B`.
 Note that `A==B` holds when `A[x]==B[x]` for all `x` and `issubset(A,B)`
 holds when `A[x] <= B[x]` for all `x`.
 
-The following can be used for testing subset and superset:
-+ `A <= B`
-+ `A < B`
-+ `A >= B`
-+ `A > B`
+
 
 ## Iteration
 
