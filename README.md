@@ -251,6 +251,8 @@ See also my [`Counters`](https://github.com/scheinerman/Counters.jl.git) module.
 
 ## Miscellaneous
 
+### Implementation
+
 A `Multiset` consists of a single data field called `data` that is a
 dictionary mapping elements to their multiplicities. The various
 `Multiset` functions ensure the integrity of `data` (enforcing nonnegativity).
@@ -263,3 +265,34 @@ can be used as a key in a dictionary, etc. The hash of a
 **Note**: The `clean!` function is not exported. There probably should be no
 reason for the user to invoke it, but if desired use
 `Multisets.clean!(M)`.
+
+### Making a copy of a `Multiset`
+
+If `A` is a `Multiset`, then `B=A` assigns `B` to be the same object as `A`. That is,
+any changes to one affects the other:
+```julia
+julia> A = Multiset(1,1,2,3,5)
+{1,1,2,3,5}
+julia> B = A
+{1,1,2,3,5}
+julia> A[8]=2;
+
+julia> A
+{1,1,2,3,5,8,8}
+julia> B
+{1,1,2,3,5,8,8}
+```
+
+To make an independent copy, use `deepcopy`:
+```julia
+julia> A = Multiset(1,1,2,3,5)
+{1,1,2,3,5}
+julia> B = deepcopy(A)
+{1,1,2,3,5}
+julia> A[8]=2;
+
+julia> A
+{1,1,2,3,5,8,8}
+julia> B
+{1,1,2,3,5}
+```
