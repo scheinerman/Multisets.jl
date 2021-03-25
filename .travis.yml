@@ -4,6 +4,7 @@ os:
   - linux
 julia:
   - 1.5
+  - 1.6
 notifications:
   email: false
 git:
