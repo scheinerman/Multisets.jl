@@ -154,20 +154,22 @@ end
 (==)(A::Multiset, B::Multiset) = (length(A) == length(B)) && issubset(A, B)
 
 
-## mixing Multisets with other AbstractSets
+## mixing Multisets with other AbstractSets and the like
 
-AnySet = Union{BitSet,Set}
 
-union(A::Multiset, B::T) where {T<:AnySet} = union(A, Multiset(B))
+union(A::Multiset, B::T) where {T} = union(A, Multiset(B))
 union(B::Set, A::Multiset) = union(A, Multiset(B))
 union(B::BitSet, A::Multiset) = union(A, Multiset(B))
 
-intersect(A::Multiset, B::T) where {T<:AnySet} = intersect(A, Multiset(B))
+intersect(A::Multiset, B::T) where {T} = intersect(A, Multiset(B))
 intersect(B::Set, A::Multiset) = intersect(A, Multiset(B))
 intersect(B::BitSet, A::Multiset) = intersect(A, Multiset(B))
 
-(+)(A::Multiset, B::T) where {T<:AnySet} = A + Multiset(B)
-(+)(B::T, A::Multiset) where {T<:AnySet} = A + Multiset(B)
+(+)(A::Multiset, B::T) where {T} = A + Multiset(B)
+(+)(B::T, A::Multiset) where {T} = A + Multiset(B)
 
-(-)(A::Multiset, B::T) where {T<:AnySet} = A - Multiset(B)
-(-)(B::T, A::Multiset) where {T<:AnySet} = Multiset(B) - A
+(-)(A::Multiset, B::T) where {T} = A - Multiset(B)
+(-)(B::T, A::Multiset) where {T} = Multiset(B) - A
+
+(*)(A::Multiset, B::T) where {T} = A * Multiset(B)
+(*)(A::T, B::Multiset) where {T} = Multiset(A) * B

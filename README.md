@@ -7,12 +7,12 @@ A `Set` is an unordered collection of things in which an item may appear at most
 
 A `Multiset` is an unordered collection of things with repetition permitted.
 
-## New in Version 0.4.0
+## New in Version 0.4.x
 
 + A `Multiset` is now a subtype of `AbstractSet`.
-+ Set operations between a `Multiset` and a `Set` (or `BitSet`) are now permitted.
-+ The operators `&` and `|` are removed; use `∩` and `∪` instead.
-+ The operators `<`, `<=`, `>`, and `>=` are removed. Use `⊆` and `⊇` instead, or use the function `issubset`. 
++ Set operations between a `Multiset` and a `Set` (or `BitSet`) are now supported.
++ The operators `&` and `|` have been removed; use `∩` and `∪` instead.
++ The operators `<`, `<=`, `>`, and `>=` have been removed. Use `⊆` and `⊇` instead, or use the function `issubset`. 
 
 
 ## Creating a Multiset
