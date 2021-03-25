@@ -42,3 +42,11 @@ X = Set(A)
 
 @test X ⊆ A 
 @test A ⊇ X
+@test 1 ∈ A
+@test 9 ∉ A
+
+A = Multiset(1,2,3)
+B = Multiset(1,2,3,4)
+B[4]=0
+@test A==B
+@test hash(A) == hash(B)

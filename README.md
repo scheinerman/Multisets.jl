@@ -3,12 +3,11 @@
 [![Build Status](https://travis-ci.com/scheinerman/Multisets.jl.svg?branch=master)](https://travis-ci.com/scheinerman/Multisets.jl)
 
 
+A `Set` is an unordered collection of things in which an item may appear at most once.
 
-Finite multisets in Julia.
+A `Multiset` is an unordered collection of things with repetition permitted.
 
-A *multiset* is an unordered collection of things with repetition permitted.
-
-## New in Version 4.0
+## New in Version 0.4.0
 
 + A `Multiset` is now a subtype of `AbstractSet`.
 + Set operations between a `Multiset` and a `Set` (or `BitSet`) are now permitted.
@@ -198,10 +197,17 @@ The function `isempty` returns `true` exactly when `length(M)==0`.
 ## Comparison
 
 The operator `A==B` and the function `issubset(A,B)` are provided to determine
-if `A` and `B` are equal or `A`is a submultiset of `B`.
+if `A` and `B` are equal or `A`is a submultiset of `B`. This can also be expressed
+as `A ⊆ B` or `B ⊇ A`. 
 
 Note that `A==B` holds when `A[x]==B[x]` for all `x` and `issubset(A,B)`
 holds when `A[x] <= B[x]` for all `x`.
+
+To test if `x` is an element of a multiset `A`, one may use any of the following:
++ `x ∈ A`
++ `in(x,A)`
++ `A ∋ x`
++ `A[x] > 0`
 
 
 
@@ -227,7 +233,7 @@ julia> sum(A)
 ```
 
 
-## Multisets as counters
+## Multisets as Counters
 
 Multisets are useful devices for counting. For example, suppose a program
 reads in words from a text file and we want to count how often each word
@@ -240,7 +246,7 @@ for word in FILE
 end
 ```
 In the end, `M[word]` will return how often `word` was seen in the file.
-See also my `Counters` module.
+See also my [`Counters`](https://github.com/scheinerman/Counters.jl.git) module.
 
 
 ## Miscellaneous

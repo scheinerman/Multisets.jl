@@ -5,7 +5,7 @@ import Base.iterate
 # In iterating in a multiset, we should see each element repeatedly 
 # corresponding to its multiplicity in the multiset.
 
-# We bulid a complicated state as follows:
+# We bulid a state as follows:
 # ss = (val, k, next)
 # val is the val we returned
 # k is the number of times we returned val 

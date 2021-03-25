@@ -22,7 +22,8 @@ end
 
 """
 `union(A,B)` for multisets creates a new multiset in which the
-multiplicity of `x` is `max(A[x],B[x])`.
+multiplicity of `x` is `max(A[x],B[x])`. This may be invoked as 
+`A ∪ B`.
 """
 function union(A::Multiset{S}, B::Multiset{T}) where {S,T}
     if S == T
@@ -37,7 +38,7 @@ end
 
 """
 `A+B` for multisets is the disjoint union, i.e., a new multiset in which the
-multiplicity of `x` is `A[x]+B[x]`. This can be abbreviated `A|B`.
+multiplicity of `x` is `A[x]+B[x]`. 
 """
 function (+)(A::Multiset{S}, B::Multiset{T}) where {S,T}
     ST = typejoin(S, T)
@@ -89,7 +90,7 @@ end
 """
 `intersect(A,B)` for multisets creates a new multiset in which the
 multiplicity of `x` is `min(A[x],B[x])`.
-This may be abbreviated `A&B`.
+This may be abbreviated `A ∩ B`.
 """
 function intersect(A::Multiset{S}, B::Multiset{T}) where {S,T}
     if S == T
