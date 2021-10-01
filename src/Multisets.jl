@@ -6,7 +6,7 @@ import Base: (*), (+), (-)
 import Base: issubset, Set, (==)
 
 
-export Multiset, set_short_show, set_julia_show, set_braces_show
+export Multiset, set_short_show, set_julia_show, set_braces_show, set_key_value_show
 
 """
 A `Multiset` is an unordered collection of things with repetition permitted.
@@ -148,6 +148,9 @@ end
 
 short_string(M::Multiset{T}) where {T} = "Multiset{$T} with $(length(M)) elements"
 
+key_value_string(M::Multiset{T}) where {T} = "Multiset{$T}($(mapreduce(string, (l,r) -> l == "" ? r : l*", "*r, pairs(M), init="")))"
+
+
 function julia_string(M::Multiset{T}) where {T}
     elts = collect(M)
     n = length(elts)
@@ -175,6 +178,7 @@ end
 const multi_show_braces = 0
 const multi_show_short = 1
 const multi_show_julia = 2
+const multi_show_key_count = 3
 multi_show_flag = multi_show_braces
 
 
@@ -184,7 +188,7 @@ Set show display mode for multisets, like this:
 
 `Multiset{Int64} with 7 elements`
 
-See also `set_braces_show` and `set_julia_show`.
+See also `set_braces_show`,`set_key_value_show` and `set_julia_show`.
 """
 set_short_show() = (global multi_show_flag = multi_show_short; nothing)
 
@@ -193,7 +197,7 @@ Set braces display mode for multisets, like this:
 
 `{1,2,2,3,3,3,3}`
 
-See also `set_short_show` and `set_julia_show`.
+See also `set_short_show`, `set_key_value_show` and `set_julia_show`.
 """
 set_braces_show() = (global multi_show_flag = multi_show_braces; nothing)
 
@@ -203,9 +207,18 @@ Set Julia style display mode for multisets, like this:
 
 `Multiset(Int64[1,2,2,3,3,3,3])`
 
-See also `set_short_show` and `set_braces_show`.
+See also `set_short_show`, `set_key_value_show` and `set_braces_show`.
 """
 set_julia_show() = (global multi_show_flag = multi_show_julia; nothing)
+
+"""
+Set key-count style display mode for multisets, like this:
+
+`Multiset{Int64}(1 => 1, 2 => 2, 3 => 4)`
+
+See also `set_short_show`, `set_julia_show` and `set_braces_show`.
+"""
+set_key_value_show() = (global multi_show_flag = multi_show_key_count; nothing)
 
 function show(io::IO, M::Multiset)
     if multi_show_flag == multi_show_short
@@ -217,6 +230,9 @@ function show(io::IO, M::Multiset)
     if multi_show_flag == multi_show_julia
         print(io, julia_string(M))
     end
+    if multi_show_flag == multi_show_key_count 
+        print(io, key_value_string(M))
+    end 
 end
 
 show(M::Multiset) = show(stdout, M)
