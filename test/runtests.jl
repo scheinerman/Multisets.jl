@@ -50,3 +50,14 @@ B = Multiset(1,2,3,4)
 B[4]=0
 @test A==B
 @test hash(A) == hash(B)
+
+set_key_value_show()
+A = Multiset(1, 1, 1, 2, 1, 3, 3)
+
+@test string(A) == "Multiset{Int64}(2 => 1, 3 => 2, 1 => 4)"
+
+B = Multiset()
+
+@test string(B) == "Multiset{Any}()"
+
+nothing
