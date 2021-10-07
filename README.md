@@ -127,6 +127,10 @@ abbreviated format like this: `Multiset{String} with 3 elements`.
 + `set_julia_show()` causes multisets to be printed in a form that would
 be a proper Julia definition of that multiset:
 `Multiset(String["alpha","beta","beta"])`.
++ `set_key_value_show()` causes multisets to be printed in a way that
+shows each element
+and its multiplicity as key-value pairs: `Multiset{String}("alpha" => 1, "beta" => 2)`.
+
 
 
 
