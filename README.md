@@ -1,8 +1,5 @@
 # Multisets
 
-[![Build Status](https://travis-ci.com/scheinerman/Multisets.jl.svg?branch=master)](https://travis-ci.com/scheinerman/Multisets.jl)
-
-
 A `Set` is an unordered collection of things in which an item may appear at most once.
 
 A `Multiset` is an unordered collection of things with repetition permitted.
