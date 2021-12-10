@@ -28,6 +28,22 @@ end
 Multiset() = Multiset{Any}()
 Multiset(x...) = Multiset(collect(x))
 
+function Base.copy(M::Multiset{T}) where {T}
+    newMultiset = Multiset{T}()
+    for (key, value) in pairs(M)
+        newMultiset[key] = value
+    end
+    return newMultiset
+end
+
+function Base.empty!(M::Multiset{T}) where {T}
+    for (key, value) in pairs(M)
+        M[key] = 0
+    end
+    clean!(M)
+    return M
+end
+
 eltype(M::Multiset{T}) where {T} = T
 
 function Multiset(list::AbstractArray{T,d}) where {T,d}
