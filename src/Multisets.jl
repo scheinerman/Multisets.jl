@@ -38,7 +38,7 @@ end
 
 function Base.empty!(M::Multiset{T}) where {T}
     for (key, value) in pairs(M)
-        M[key] = value
+        M[key] = 0
     end
     clean!(M)
     return M
