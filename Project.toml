@@ -1,6 +1,6 @@
 name = "Multisets"
 uuid = "3b2b4ff1-bcff-5658-a3ee-dbcf1ce5ac09"
-version = "0.4.3"
+version = "0.4.4"
 
 [compat]
 julia = "1"

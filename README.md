@@ -284,7 +284,7 @@ julia> B
 {1,1,2,3,5,8,8}
 ```
 
-To make an independent copy, use `deepcopy`:
+To make an independent copy, use `copy` or `deepcopy`:
 ```julia
 julia> A = Multiset(1,1,2,3,5)
 {1,1,2,3,5}
@@ -297,3 +297,6 @@ julia> A
 julia> B
 {1,1,2,3,5}
 ```
+Note that `deepcopy` duplicates all elements of the multiset. If the elements are immutable,
+then `deepcopy` is more efficient than `copy`. On the other hand, if the elements are 
+mutable, then `deepcopy` is slower because it creates independent copies of the elements. 

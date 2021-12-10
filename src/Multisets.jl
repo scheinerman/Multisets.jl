@@ -164,7 +164,8 @@ end
 
 short_string(M::Multiset{T}) where {T} = "Multiset{$T} with $(length(M)) elements"
 
-key_value_string(M::Multiset{T}) where {T} = "Multiset{$T}($(mapreduce(string, (l,r) -> l == "" ? r : l*", "*r, pairs(M), init="")))"
+key_value_string(M::Multiset{T}) where {T} =
+    "Multiset{$T}($(mapreduce(string, (l,r) -> l == "" ? r : l*", "*r, pairs(M), init="")))"
 
 
 function julia_string(M::Multiset{T}) where {T}
@@ -246,9 +247,9 @@ function show(io::IO, M::Multiset)
     if multi_show_flag == multi_show_julia
         print(io, julia_string(M))
     end
-    if multi_show_flag == multi_show_key_count 
+    if multi_show_flag == multi_show_key_count
         print(io, key_value_string(M))
-    end 
+    end
 end
 
 show(M::Multiset) = show(stdout, M)

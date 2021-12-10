@@ -31,24 +31,24 @@ A = Multiset(1, 1, 1, 2, 1, 3, 3)
 
 
 B = Set(3:5)
-@test A-B == Multiset(1,1,1,1,2,3)
-@test B-A == BitSet(4:5)
+@test A - B == Multiset(1, 1, 1, 1, 2, 3)
+@test B - A == BitSet(4:5)
 
-@test length(A+B) == length(A)+length(B) == length(B+A)
+@test length(A + B) == length(A) + length(B) == length(B + A)
 @test A ∩ B == Set(3) == B ∩ A
-@test A ∪ B == Multiset(1,1,1,1,2,3,3,4,5) == B ∪ A
+@test A ∪ B == Multiset(1, 1, 1, 1, 2, 3, 3, 4, 5) == B ∪ A
 
 X = Set(A)
 
-@test X ⊆ A 
+@test X ⊆ A
 @test A ⊇ X
 @test 1 ∈ A
 @test 9 ∉ A
 
-A = Multiset(1,2,3)
-B = Multiset(1,2,3,4)
-B[4]=0
-@test A==B
+A = Multiset(1, 2, 3)
+B = Multiset(1, 2, 3, 4)
+B[4] = 0
+@test A == B
 @test hash(A) == hash(B)
 
 set_key_value_show()
@@ -59,5 +59,12 @@ A = Multiset(1, 1, 1, 2, 1, 3, 3)
 B = Multiset()
 
 @test string(B) == "Multiset{Any}()"
+
+A = Multiset(1:5)
+B = copy(A)
+@test A == B
+empty!(A)
+@test length(A) == 0
+@test A != B
 
 nothing
