@@ -50,6 +50,7 @@ B = Multiset(1, 2, 3, 4)
 B[4] = 0
 @test A == B
 @test hash(A) == hash(B)
+@test hash(A, UInt(42)) == hash(B, UInt(42))
 
 set_key_value_show()
 A = Multiset(1, 1, 1, 2, 1, 3, 3)

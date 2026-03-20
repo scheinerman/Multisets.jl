@@ -258,7 +258,7 @@ display(M::Multiset) = print(string(M))
 
 
 
-function hash(M::Multiset, h::UInt = UInt(0))
+function hash(M::Multiset, h::UInt)
     clean!(M)
     return hash(M.data, h)
 end
